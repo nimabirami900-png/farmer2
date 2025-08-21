@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سایت کارشناسان کشاورزی</title>
+    <!-- استفاده از فونت اینتر برای ظاهری مدرن‌تر -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <!-- لینک سی‌دی‌ان Tailwind CSS برای استایل‌دهی سریع -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f0fdf4; /* رنگ سفید-سبز بسیار روشن */
+        }
+        /* تعریف رنگ‌های سفارشی بر اساس خواسته‌ی شما */
+        .bg-custom-green {
+            background-color: #2e8b57; /* سبز دریایی */
+        }
+        .bg-custom-light-green {
+            background-color: #4CAF50; /* سبز روشن */
+        }
+        .text-custom-green {
+            color: #2e8b57;
+        }
+        .border-custom-green {
+            border-color: #2e8b57;
+        }
+
+        /* استایل انیمیشن اول صفحه */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            transition: opacity 0.5s ease-out;
+            z-index: 100;
+        }
+        
+        /* استایل SVG و انیمیشن‌ها */
+        .watering-tree-container {
+            width: 150px;
+            height: 150px;
+            position: relative;
+        }
+
+        .watering-can {
+            transform-origin: 80% 90%;
+            animation: pour 1.5s forwards;
+            fill: #a5a5a5;
+        }
+
+        .water {
+            transform-origin: top;
+            animation: fall-water 1.5s forwards 0.5s;
+            fill: #4CAF50;
+        }
+
+        .tree-root {
+            fill: #8B4513;
+            transform-origin: center bottom;
+            animation: grow 0.8s forwards 1.7s;
+        }
+        
+        .tree-foliage {
+            fill: #2e8b57;
+            transform-origin: center bottom;
+            animation: grow 0.8s forwards 1.7s;
+        }
+
+        @keyframes pour {
+            0% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(-45deg);
+            }
+            100% {
+                transform: rotate(-45deg);
+            }
+        }
+        
+        @keyframes fall-water {
+            0% {
+                transform: scaleY(0);
+                opacity: 0;
+            }
+            100% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes grow {
+            0% {
+                transform: scaleY(0);
+            }
+            100% {
+                transform: scaleY(1);
+            }
+        }
+
+        /* استایل افکت‌های کشاورزی برای بخش اصلی */
+        .agricultural-effect {
+            position: relative;
+            background-image: url("https://placehold.co/1200x600/f0fdf4/2e8b57?text=مزارع+سرسبز");
+            background-size: cover;
+            background-position: center;
+            padding: 10rem 0;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* استایل برای کارت‌های کارشناس */
+        .expert-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .expert-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* استایل برای مودال (پنجره پاپ‌آپ) */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #2e8b57;
+        }
+    </style>
+</head>
+<body class="bg-f0fdf4 text-gray-800">
+
+    <!-- انیمیشن اول صفحه (3 ثانیه) -->
+    <div id="splash-screen">
+        <div class="flex flex-col items-center">
+            <div class="watering-tree-container">
+                <svg width="150" height="150" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- درخت -->
+                    <path class="tree-root" d="M70 150 L80 150 L80 100 L70 100 L70 150 Z"/>
+                    <path class="tree-foliage" d="M75 50 Q100 0 125 50 T75 100 T25 50 Q50 0 75 50 Z"/>
+                    
+                    <!-- آب‌ریز -->
+                    <g class="watering-can" transform="translate(60, 20)">
+                        <path d="M50 20 Q55 20 55 25 V45 Q50 45 45 40 Q40 45 35 45 L35 25 Q35 20 40 20 L50 20 Z" fill="#4CAF50"/>
+                        <rect x="35" y="10" width="10" height="20" rx="5" fill="#4CAF50"/>
+                    </g>
+                    
+                    <!-- قطره آب -->
+                    <rect class="water" x="72.5" y="60" width="5" height="40" fill="#4CAF50"/>
+                </svg>
+            </div>
+            <p class="mt-4 text-custom-green text-xl font-bold">بارگذاری...</p>
+        </div>
+    </div>
+
+    <!-- محتوای اصلی سایت -->
+    <div id="main-content" class="hidden">
+        <!-- هدر -->
+        <header class="bg-custom-green text-white p-6 shadow-lg">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-3xl font-bold">کارشناسان کشاورزی</h1>
+                <nav>
+                    <ul class="flex space-x-4 space-x-reverse">
+                        <li><a href="#experts" class="hover:underline">کارشناسان</a></li>
+                        <li><a href="#tariffs" class="hover:underline">تعرفه‌ها</a></li>
+                        <li><a href="#" class="hover:underline">تماس با ما</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- بخش اصلی با افکت کشاورزی -->
+        <section class="agricultural-effect text-center mb-16">
+            <div class="container mx-auto">
+                <h2 class="text-5xl font-extrabold mb-4">به دنیای تخصص کشاورزی خوش آمدید</h2>
+                <p class="text-xl">اینجا می‌توانید با بهترین کارشناسان کشاورزی آشنا شوید و از خدمات آن‌ها بهره ببرید.</p>
+            </div>
+        </section>
+
+        <!-- بخش نمایش کارشناسان و رزومه -->
+        <section id="experts" class="container mx-auto p-4 mb-16">
+            <h3 class="text-4xl font-bold text-center text-custom-green mb-10">کارشناسان ما</h3>
+            <div id="expert-cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- کارت‌های کارشناسان به صورت داینامیک توسط جاوااسکریپت اینجا اضافه می‌شوند -->
+            </div>
+        </section>
+
+        <!-- بخش تعرفه‌ها -->
+        <section id="tariffs" class="bg-custom-light-green text-white p-8">
+            <div class="container mx-auto">
+                <h3 class="text-4xl font-bold text-center mb-10">لیست تعرفه‌ها</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- تعرفه اول -->
+                    <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg text-center">
+                        <h4 class="text-3xl font-bold text-custom-green mb-4">مشاوره پایه</h4>
+                        <p class="text-5xl font-extrabold text-gray-900 mb-4">۹۰,۰۰۰ تومان</p>
+                        <p class="text-sm text-gray-500 mb-6">به ازای هر ساعت</p>
+                        <ul class="text-right list-disc list-inside space-y-2 mb-6">
+                            <li>مشاوره تلفنی</li>
+                            <li>پاسخ به سوالات اولیه</li>
+                            <li>معرفی منابع</li>
+                        </ul>
+                        <button class="w-full bg-custom-green text-white py-3 rounded-lg font-bold hover:bg-opacity-80 transition-colors">ثبت درخواست</button>
+                    </div>
+                    <!-- تعرفه دوم -->
+                    <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg text-center border-4 border-custom-green">
+                        <h4 class="text-3xl font-bold text-custom-green mb-4">بسته کامل</h4>
+                        <p class="text-5xl font-extrabold text-gray-900 mb-4">۲۵۰,۰۰۰ تومان</p>
+                        <p class="text-sm text-gray-500 mb-6">مشاوره حضوری در محل</p>
+                        <ul class="text-right list-disc list-inside space-y-2 mb-6">
+                            <li>بازدید حضوری از زمین</li>
+                            <li>تحلیل دقیق خاک و محصول</li>
+                            <li>ارائه برنامه جامع</li>
+                            <li>پشتیبانی یک ماهه</li>
+                        </ul>
+                        <button class="w-full bg-custom-green text-white py-3 rounded-lg font-bold hover:bg-opacity-80 transition-colors">ثبت درخواست</button>
+                    </div>
+                    <!-- تعرفه سوم -->
+                    <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg text-center">
+                        <h4 class="text-3xl font-bold text-custom-green mb-4">کارگاه آموزشی</h4>
+                        <p class="text-5xl font-extrabold text-gray-900 mb-4">۴۰۰,۰۰۰ تومان</p>
+                        <p class="text-sm text-gray-500 mb-6">به ازای هر جلسه</p>
+                        <ul class="text-right list-disc list-inside space-y-2 mb-6">
+                            <li>کارگاه تخصصی گروهی</li>
+                            <li>آموزش عملی</li>
+                            <li>پرسش و پاسخ</li>
+                        </ul>
+                        <button class="w-full bg-custom-green text-white py-3 rounded-lg font-bold hover:bg-opacity-80 transition-colors">ثبت درخواست</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- فوتر -->
+        <footer class="bg-gray-800 text-white p-6 mt-16 text-center">
+            <p>&copy; ۱۴۰۳. تمامی حقوق محفوظ است.</p>
+        </footer>
+
+    </div>
+
+    <!-- مودال (پنجره پاپ‌آپ) برای نمایش رزومه -->
+    <div id="expert-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="modal-content-inner">
+                <!-- محتوای رزومه اینجا بارگذاری می‌شود -->
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // داده‌های کارشناسان
+        const experts = [
+            {
+                name: 'سارا کریمی',
+                image: 'https://placehold.co/150x150/2e8b57/fff?text=سارا',
+                title: 'کارشناس خاک‌شناسی',
+                bio: 'با بیش از ۱۰ سال سابقه در زمینه تحلیل خاک و بهینه‌سازی کود.',
+                resume: {
+                    businessCard: {
+                        name: 'سارا کریمی',
+                        title: 'کارشناس ارشد خاک‌شناسی',
+                        phone: '۰۹۱۲۳۴۵۶۷۸۹',
+                        email: 'sara.karimi@example.com'
+                    },
+                    portfolio: [
+                        { title: 'بررسی سلامت زمین‌های زراعی', description: 'تحلیل دقیق بافت خاک و pH برای افزایش عملکرد محصول.' },
+                        { title: 'مدیریت آفات در دام‌ها', description: 'ارائه راهکارهای طبیعی و موثر برای کنترل آفات در دامداری.' },
+                        { title: 'طراحی سیستم آبیاری هوشمند', description: 'پیاده‌سازی سیستم‌های آبیاری قطره‌ای برای صرفه‌جویی در مصرف آب.' }
+                    ]
+                }
+            },
+            {
+                name: 'علی احمدی',
+                image: 'https://placehold.co/150x150/2e8b57/fff?text=علی',
+                title: 'کارشناس دامپزشکی',
+                bio: 'متخصص در بهداشت و تغذیه دام و طیور.',
+                resume: {
+                    businessCard: {
+                        name: 'علی احمدی',
+                        title: 'دامپزشک و کارشناس تغذیه',
+                        phone: '۰۹۱۲۰۹۸۷۶۵۴',
+                        email: 'ali.ahmadi@example.com'
+                    },
+                    portfolio: [
+                        { title: 'واکسیناسیون گله‌های گوسفند', description: 'اجرای برنامه واکسیناسیون جامع برای جلوگیری از بیماری‌ها.' },
+                        { title: 'بهینه‌سازی جیره‌ غذایی طیور', description: 'افزایش تولید و سلامت طیور با تغییرات در رژیم غذایی.' },
+                        { title: 'کنترل بیماری‌های واگیر در دامداری', description: 'اقدامات پیشگیرانه برای حفظ سلامت کلی دام‌ها.' }
+                    ]
+                }
+            },
+            {
+                name: 'مریم حسینی',
+                image: 'https://placehold.co/150x150/2e8b57/fff?text=مریم',
+                title: 'متخصص گیاه‌پزشکی',
+                bio: 'با تجربه در تشخیص و درمان بیماری‌های گیاهی.',
+                resume: {
+                    businessCard: {
+                        name: 'مریم حسینی',
+                        title: 'متخصص گیاه‌پزشکی',
+                        phone: '۰۹۳۰۵۶۷۸۹۰۱',
+                        email: 'maryam.hoseini@example.com'
+                    },
+                    portfolio: [
+                        { title: 'تشخیص بیماری‌های قارچی در باغ‌های میوه', description: 'ارائه راهکارهای درمانی و پیشگیرانه.' },
+                        { title: 'مدیریت علف‌های هرز', description: 'استفاده از روش‌های ارگانیک برای کنترل علف‌های هرز.' },
+                        { title: 'مشاوره کشت و داشت محصولات ارگانیک', description: 'راهنمایی از مرحله کاشت تا برداشت محصول ارگانیک.' }
+                    ]
+                }
+            }
+        ];
+
+        // نمایش انیمیشن و سپس محتوای اصلی
+        window.onload = function() {
+            const splashScreen = document.getElementById('splash-screen');
+            const mainContent = document.getElementById('main-content');
+            
+            // نمایش صفحه اصلی پس از 3 ثانیه
+            setTimeout(() => {
+                splashScreen.style.opacity = '0';
+                setTimeout(() => {
+                    splashScreen.style.display = 'none';
+                    mainContent.classList.remove('hidden');
+                }, 500); // زمان transition
+            }, 3000); // زمان انیمیشن
+
+            // نمایش کارت‌های کارشناسان
+            const expertCardsContainer = document.getElementById('expert-cards-container');
+            experts.forEach((expert, index) => {
+                const card = document.createElement('div');
+                card.className = 'expert-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center text-center';
+                card.innerHTML = `
+                    <img src="${expert.image}" alt="تصویر ${expert.name}" class="rounded-full w-28 h-28 mb-4 object-cover border-4 border-custom-green">
+                    <h4 class="text-2xl font-bold text-custom-green mb-1">${expert.name}</h4>
+                    <p class="text-gray-600 mb-4">${expert.title}</p>
+                    <p class="text-sm text-gray-500">${expert.bio}</p>
+                `;
+                card.onclick = () => showModal(index);
+                expertCardsContainer.appendChild(card);
+            });
+        };
+
+        // تابع برای نمایش مودال رزومه
+        function showModal(expertIndex) {
+            const expert = experts[expertIndex];
+            const modal = document.getElementById('expert-modal');
+            const modalContentInner = document.getElementById('modal-content-inner');
+            
+            modalContentInner.innerHTML = `
+                <h3 class="text-3xl font-bold text-custom-green text-center mb-6">${expert.name}</h3>
+                
+                <!-- کارت ویزیت -->
+                <div class="bg-gray-100 p-6 rounded-xl border border-dashed border-custom-green mb-8">
+                    <h4 class="text-xl font-bold mb-2">کارت ویزیت</h4>
+                    <p><strong>نام:</strong> ${expert.resume.businessCard.name}</p>
+                    <p><strong>سمت:</strong> ${expert.resume.businessCard.title}</p>
+                    <p><strong>تلفن:</strong> ${expert.resume.businessCard.phone}</p>
+                    <p><strong>ایمیل:</strong> ${expert.resume.businessCard.email}</p>
+                </div>
+                
+                <!-- نمونه کارها -->
+                <h4 class="text-xl font-bold mb-4">نمونه کارها</h4>
+                <div class="space-y-4">
+                    ${expert.resume.portfolio.map(item => `
+                        <div class="bg-f0fdf4 p-4 rounded-lg border border-custom-light-green">
+                            <h5 class="font-bold text-custom-green">${item.title}</h5>
+                            <p class="text-gray-700 text-sm mt-1">${item.description}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+
+        // تابع برای بستن مودال
+        function closeModal() {
+            document.getElementById('expert-modal').style.display = 'none';
+        }
+
+    </script>
+</body>
+</html>
